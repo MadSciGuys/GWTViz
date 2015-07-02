@@ -1,0 +1,63 @@
+<?php
+
+ function visualization_init(){
+
+    global $base_path;
+    global $base_url;
+    $my_base_path1 = $GLOBALS['base_path'].drupal_get_path('module', 'visualization');
+	$my_settings = array(
+       'path' => $my_base_path1
+    );
+    drupal_add_js(array('visualization' => $my_settings), 'setting');
+}
+function visualization_menu() {
+  $items = array();
+  
+  $items['visuals/manage'] = array(
+    'title' => 'Server API setup',
+    'page callback' => 'visual_upload',
+    'access callback' => TRUE,
+  );
+  
+  return $items;
+}
+
+function visual_upload() {
+	$msg = "";
+	$msg_type = "success";
+	
+	if(isset($_POST['serverURL'])) {
+		
+		$file = fopen(drupal_get_path('module', 'visualization')."/visuals/mroute.url","w");
+		fwrite($file,$_POST['serverURL']);
+		fclose($file);
+	
+		$msg = "Saved Successfully!";	
+	}
+	
+	if($msg != "")
+		drupal_set_message(t($msg), $msg_type);
+
+
+	$markup = '
+		<h4 style="margin-left:20px;">Manage MRoute Server URL</h4><br/>
+		<form method="post">
+		<table>
+		<tr>
+		<td>
+		Server URL/IP (should not end with \'/\')
+		</td>
+		<td>
+		<input type="text" name="serverURL" class="input-form" style="width:400px" value="'.file_get_contents(drupal_get_path('module', 'visualization')."/visuals/mroute.url").'">
+		</td>
+		</tr>
+		<tr>
+		<td colspan="2">
+		<input type="submit" value="Save" class="btn btn-success">
+		</td>
+		</tr>
+		</form>
+		</table>
+		';    	
+	return $markup;
+}

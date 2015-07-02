@@ -1,0 +1,13 @@
+name = GWTViz Module
+description = GWTViz Module(v 0.60) Allows D3 graph visualizations with external data sources.
+package = User interface
+core = 7.x
+
+scripts[] = files/js/itgp/itgpMount.js
+
+dependencies[] = wysiwyg
+
+; Module created by twojenski@itgp.com
+version = "7.x-0.60-dev"
+project = "Development"
+datestamp = "1433252372"

@@ -1,0 +1,39 @@
+<?php
+/**
+  * Implementation of hook_install().
+ */
+function visualization_install() {
+ // if(db_table_exists('visualization_data') == FALSE) {
+ //   drupal_install_schema('visualization_data');
+ // }
+}
+
+function visualization_enable() {
+  //Check if table exists, if not install the schema.
+ // if(db_table_exists('visualization_data') == FALSE) {
+ //   drupal_install_schema('visualization_data');
+ // }
+}
+
+function visualization_uninstall() {
+	
+}
+/**
+ * Implementation of hook_schema.
+ */
+function visualization_schema() {
+  // Static (meta) tables.
+  $schema['visualization_data'] = array(
+    'fields' => array(
+      'data_id'            => array('type' => 'serial', 'not null' => TRUE),
+      'data_block_name' => array('type' => 'varchar', 'length' => 500, 'not null' => TRUE),
+      'data_value'        => array('type' => 'text', 'not null' => TRUE),
+      'rid'        => array('type' => 'int', 'length' => 11, 'not null' => TRUE, 'default' => 1),
+      'created'        => array('type' => 'varchar', 'length' => 500,'not null' => TRUE)
+    ),
+    'primary key' => array('data_id'),
+  );
+return $schema;
+}
+
+?>
