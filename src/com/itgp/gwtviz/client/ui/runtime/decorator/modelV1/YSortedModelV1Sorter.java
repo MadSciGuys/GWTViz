@@ -1,7 +1,7 @@
 /* 
  * The MIT License
  *
- * Copyright 2015 InsiTech LLC.   gwtvis@insitechinc.com
+ * Copyright 2015 InsiTech LLC.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,26 +25,28 @@ package com.itgp.gwtviz.client.ui.runtime.decorator.modelV1;
 
 import com.itgp.gwtviz.client.ui.runtime.*;
 import com.itgp.gwtviz.client.ui.runtime.decorator.Sorter;
+import com.itgp.gwtviz.shared.gconfig.GraphConfigUtility;
 
 /**
  <p>
  @author Warp
  */
-public class DataModelV1Sorter extends Sorter {
+public class YSortedModelV1Sorter extends Sorter {
 
-    ColumnSorter sc;
-
-    public DataModelV1Sorter(ColumnSorter sc){
-        this.sc=sc;
+    public YSortedModelV1Sorter(GraphConfigUtility.YAxisSort direction){
+        if ( GraphConfigUtility.YAxisSort.Ascending.equals(direction)){
+            this.setSortDirection(Sorter.ASCENDING);
+        } else {
+            this.setSortDirection(Sorter.DESCENDING);
+        }
     }
     
     @Override
     public int compare(int modelRow1, int modelRow2){
-        int colNo = sc.getColumn();
         
-        DataModelV1 model = getDataModel();
-        Object val1 =  model.getData()[ modelRow1][colNo]; // String or Double
-        Object val2 =  model.getData()[ modelRow2][colNo]; // String or Double
+        YSortedModelV1 model = getDataModel();
+        Object val1 =  model.get(modelRow1)[1]; // Y value is in position and is a Double
+        Object val2 =  model.get(modelRow2)[1]; //  Y value is in position and is a Double
         
         int comparison = 0 ;
         if (val1 == null){
@@ -65,18 +67,11 @@ public class DataModelV1Sorter extends Sorter {
         return comparison;
     }
     
-    public DataModelV1 getDataModel() {
+    public YSortedModelV1 getDataModel() {
         //FilterSet is set by MultiCriteriaSorter right before invoking compare
-        DataModelV1 model = (DataModelV1) this.getFilterSet().getModel();
+        YSortedModelV1 model = (YSortedModelV1) this.getFilterSet().getModel();
 
         return model;
     }
-
-    @Override
-    public int getSortDirection(){
-        return (sc == null ? super.getSortDirection() : sc.getDirection());
-    }
-    
-    
     
 }

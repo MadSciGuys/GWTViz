@@ -1,7 +1,7 @@
-/* 
+/*
  * The MIT License
  *
- * Copyright 2015 InsiTech LLC.   gwtviz@insitechinc.com
+ * Copyright 2015 InsiTech LLC.   gwtvis@insitechinc.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,6 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
+
+
 package com.itgp.gwtviz.client.ui.runtime;
 
 import static com.itgp.gwtviz.client.ui.runtime.ColMeta.create;
@@ -33,7 +36,7 @@ import com.itgp.gwtviz.client.comm.ServerComm;
 import com.itgp.gwtviz.client.ui.runtime.ColMeta.TYPE;
 import com.itgp.gwtviz.client.ui.runtime.event.*;
 import com.itgp.gwtviz.client.ui.runtime.event.progressBar.ProgressBarNotificationEvent;
-import com.itgp.gwtviz.shared.gconfig.GraphConfigImpl_1;
+import com.itgp.gwtviz.shared.gconfig.*;
 import com.itgp.gwtviz.shared.model.*;
 import java.util.*;
 
@@ -43,25 +46,26 @@ import java.util.*;
  * @author Warp
  */
 public class RuntimeDataV1 {
-    public String            configText;
-    public GraphConfigImpl_1 config;
-    public String            fileName;
-    public long              fileID;
-    public boolean           designTime = false;
+    public String                       configText;
+    public GraphConfigImpl_1            config;
+    public String                       fileName;
+    public long                         fileID;
+    public boolean                      designTime           = false;
 
-    String                   dataArray;
-    AbstractChartXYV1        chartXY;
-    PieChartV1               pieChart;
-    ScatterChartV1           scatterChart;
-    MatrixScatterChartV1     matrixScatterChart;
+    public boolean                      sortOnYAxis          = false;
+    public GraphConfigUtility.YAxisSort sortOnYAxisDirection = GraphConfigUtility.YAxisSort.NoSort;
 
+    String                              dataArray;
+    AbstractChartXYV1                   chartXY;
+    PieChartV1                          pieChart;
+    ScatterChartV1                      scatterChart;
+    MatrixScatterChartV1                matrixScatterChart;
 
-    ChartV1                  chartToDisplay;
-    
-    String                   rawJSONData;
-    
-//    JavaScriptObject        matrixScatterData;
-    
+    ChartV1                             chartToDisplay;
+
+    String                              rawJSONData;
+
+//  JavaScriptObject        matrixScatterData;
 
     //--------------------
     private List<Item> columnDescriptors;
@@ -256,8 +260,8 @@ public class RuntimeDataV1 {
             if (this.nextRowIndex % 10 == 0) {
 
                 // every 10 rows
-                sendProgress("Processed " + this.nextRowIndex + " of " + this.numberOfRows + " rows.", this.numberOfRows, this.nextRowIndex , "dataLoopPhase" );
-                
+                sendProgress("Processed " + this.nextRowIndex + " of " + this.numberOfRows + " rows.", this.numberOfRows, this.nextRowIndex, "dataLoopPhase");
+
                 return true;    //stay in the loop
             }
         }                       // while nextRowIndex
@@ -309,15 +313,15 @@ public class RuntimeDataV1 {
        }-*/
     ;
 
-    public static native double getDouble(JavaScriptObject jsArray, int index)                                                                           /*-{
-                                                                                      var v = jsArray[index];
+    public static native double getDouble(JavaScriptObject jsArray, int index)                                                                                  /*-{
+                                                                                             var v = jsArray[index];
 
-                                                                                      var retVal = $wnd.parseFloat(v);
-                                                                                      if ( $wnd.isNaN( retVal) ){
-                                                                                              retVal = 0;
-                                                                                      }
-                                                                                      return retVal;
-                                                                              }-*/
+                                                                                             var retVal = $wnd.parseFloat(v);
+                                                                                             if ( $wnd.isNaN( retVal) ){
+                                                                                                     retVal = 0;
+                                                                                             }
+                                                                                             return retVal;
+                                                                                     }-*/
     ;
 
     public static native JavaScriptObject getArray(JavaScriptObject jsArray, int index)    /*-{
@@ -463,31 +467,32 @@ public class RuntimeDataV1 {
 
     //----------------------------------------------------------------
 
-    
-    public void sendProgressInit(){
+    public void sendProgressInit() {
         NotificationEvent evt = NotificationEvent.createInitEvent();
         progressReporting.fireEvent(evt);
     }
-    
+
     public void sendProgress(String progressReport) {
         if (progressReport != null) {
             NotificationEvent evt = new NotificationEvent(progressReport);
             progressReporting.fireEvent(evt);
         }
     }
-      public void sendProgress(String progressReport, String phase) {
+
+    public void sendProgress(String progressReport, String phase) {
         if (progressReport != null) {
             NotificationEvent evt = new NotificationEvent(progressReport, phase);
             progressReporting.fireEvent(evt);
         }
-    }  
+    }
+
     public void sendProgress(String progressReport, int max, int current, String phase) {
         if (progressReport != null) {
-            ProgressBarNotificationEvent evt = new ProgressBarNotificationEvent(progressReport, max, current,phase);
+            ProgressBarNotificationEvent evt = new ProgressBarNotificationEvent(progressReport, max, current, phase);
             progressReporting.fireEvent(evt);
         }
-    }  
-    
+    }
+
     public void sendProgressDone() {
         progressReporting.fireEvent(createDoneEvent());
     }

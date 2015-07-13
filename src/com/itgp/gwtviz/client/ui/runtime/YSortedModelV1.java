@@ -1,7 +1,7 @@
 /* 
  * The MIT License
  *
- * Copyright 2015 InsiTech LLC.   gwtvis@insitechinc.com
+ * Copyright 2015 InsiTech LLC.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,54 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.itgp.gwtviz.client.ui.config;
+package com.itgp.gwtviz.client.ui.runtime;
 
-import com.sencha.gxt.widget.core.client.Window;
+import java.util.ArrayList;
 
-public class NotifyPayload {
-
-	Window window;
-	String windowName;
-	String type ="";
-	Object data;
-
-	public NotifyPayload(Window window, String windowName, Object data) {
-		super();
-		this.window = window;
-		this.windowName = windowName;
-		this.data = data;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	public Window getWindow() {
-		return window;
-	}
-
-	public void setWindow(Window window) {
-		this.window = window;
-	}
-
-	public String getWindowName() {
-		return windowName;
-	}
-
-	public void setWindowName(String windowName) {
-		this.windowName = windowName;
-	}
-
-	public Object getData() {
-		return data;
-	}
-
-	public void setData(Object data) {
-		this.data = data;
-	}
-
+/**
+ <p>
+ @author Warp
+ */
+public class YSortedModelV1{
+    
+    ArrayList<Object[]> data = new ArrayList<Object[]>();
+    
+    public void add(Object x, double y, String label){
+        Object[] row = new Object[3];
+        row[0] = x;
+        row[1] = y;
+        row[2] = label;
+        data.add(row);
+    }
+    
+    public Object[] get(int index){
+        return data.get(index);
+    }
+    
+    public int size(){
+        return data.size();
+    }
+    
 }

@@ -1,7 +1,7 @@
 /* 
  * The MIT License
  *
- * Copyright 2015 InsiTech LLC.   gwtviz@insitechinc.com
+ * Copyright 2015 InsiTech LLC.   gwtvis@insitechinc.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -107,6 +107,7 @@ public class MainDesktop implements EntryPoint {
 
 		MainDesktop.consoleLog("initDevPlugin " + 4);
 		configPanel_1.readCurrentStateFromConfig();
+		configPanel_1.applyChartSetting();
 		MainDesktop.consoleLog("initDevPlugin " + 5);
 		
 		

@@ -1,6 +1,6 @@
 /* 
  *
- * Copyright 2015 InsiTech LLC.   gwtviz@insitechinc.com
+ * Copyright 2015 InsiTech LLC.   gwtvis@insitechinc.com
  *
  */
 package com.itgp.gwtviz.client.ui.fixes;

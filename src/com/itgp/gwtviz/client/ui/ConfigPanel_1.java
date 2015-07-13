@@ -1,7 +1,7 @@
 /* 
  * The MIT License
  *
- * Copyright 2015 InsiTech LLC.   gwtviz@insitechinc.com
+ * Copyright 2015 InsiTech LLC.   gwtvis@insitechinc.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -48,6 +48,7 @@ import com.itgp.gwtviz.shared.gconfig.AutoBeanItem;
 import com.itgp.gwtviz.shared.gconfig.AutoBeanItems;
 import com.itgp.gwtviz.shared.gconfig.GraphConfigImpl_1;
 import com.itgp.gwtviz.shared.gconfig.GraphConfigUtility;
+import com.itgp.gwtviz.shared.gconfig.GraphConfigUtility.YAxisSort;
 import com.itgp.gwtviz.shared.model.ChartDesc;
 import com.itgp.gwtviz.shared.model.Item;
 import com.itgp.gwtviz.shared.model.ItemUtil;
@@ -92,6 +93,7 @@ public class ConfigPanel_1 implements INotify {
 	private static final String yAxisColumnLabelDefaultTxt = "Click to Choose Y Column";
 	private static final String xAxisMultiSeriesColumnDefaultTxt = "Click to Choose Multi-Series Column";
 	TextField yAxisTitle;
+	SimpleComboBox<String> yAxisSortComboBox;
 
 	// SimpleComboBox<String> xAxisColumnComboBox;
 	// SimpleComboBox<String> xAxisRotateLabelsComboBox;
@@ -113,6 +115,8 @@ public class ConfigPanel_1 implements INotify {
 	FieldSet fieldSetMetaData;
 	FieldSet fieldSetYAxis;
 	FieldSet fieldSetXAxis;
+
+	FieldLabel yAxisSortComobBoxLabel;
 
 	public ConfigPanel_1() {
 		configPanel_1 = this;
@@ -242,13 +246,25 @@ public class ConfigPanel_1 implements INotify {
 		yAxisColumnLabel.setLabelAlign(LabelAlign.LEFT);
 
 		labelY = new FieldLabel(yAxisTitle, "Y Axis Label");
-		// labelY.setLabelWidth(200);
 		labelY.setLabelAlign(LabelAlign.LEFT);
+
+		// Make yAxis Sort ComboBox
+		yAxisSortComboBox = new SimpleComboBox<String>(new StringLabelProvider<String>());
+		yAxisSortComboBox.setWidth(getChildInPanelWidth());
+		yAxisSortComboBox.setTriggerAction(TriggerAction.ALL);
+		yAxisSortComboBox.setEmptyText(YAxisSort.NoSort.name());
+
+		for (String s : UIUtility.getSortChoices()) {
+			yAxisSortComboBox.add(s);
+		}
+
+		yAxisSortComobBoxLabel = new FieldLabel(yAxisSortComboBox, "Y Axis Sort");
 
 		// yAxisColumnLabel.setStyleName(yAxisTitle.getStyleName());
 		// hlcYAxis.add(labelY, new BoxLayoutData(new Margins(1, 2, 1, 20)));
 		vlc.add(yAxisColumnLabel);
 		vlc.add(labelY);
+		vlc.add(yAxisSortComobBoxLabel);
 
 		return vlc;
 	}
@@ -724,6 +740,8 @@ public class ConfigPanel_1 implements INotify {
 				for (AutoBeanItem abi : graphConfigImpl.getOptions().getData()) {
 					if (abi.getLabel().equals(GraphConfigUtility.Options.MultiSeriesBreakColumn.name())) {
 						xAxisMultiSeriesColumn.setText(abi.getValue());
+					} else if (abi.getLabel().equals(GraphConfigUtility.Options.YAxisSort.name())) {
+						yAxisSortComboBox.setText(abi.getValue());
 					}
 				}
 			}
@@ -740,6 +758,8 @@ public class ConfigPanel_1 implements INotify {
 
 		GraphConfigUtility.saveConfigOption(xAxisMultiSeriesColumn.getText(), xAxisMultiSeriesColumnDefaultTxt, graphConfigImpl,
 				GraphConfigUtility.Options.MultiSeriesBreakColumn);
+
+		GraphConfigUtility.saveConfigOption(yAxisSortComboBox.getText(), YAxisSort.NoSort.name(), graphConfigImpl, GraphConfigUtility.Options.YAxisSort);
 
 		GraphConfigUtility.saveConfigOption("120", "", graphConfigImpl, GraphConfigUtility.Options.ForceYPercentage);
 
@@ -788,12 +808,34 @@ public class ConfigPanel_1 implements INotify {
 		return null;
 	}
 
+	public void applyChartSetting() {
+		Charts chart = Charts.Bar_Chart;
+		MainDesktop.consoleLog("QQ1 "+chart.name());
+		try {
+			chart = UIUtility.getChartEnum(chartComboBox.getText());
+			MainDesktop.consoleLog("QQ2 "+chart.name());
+		} catch (Exception e) {
+			MainDesktop.consoleLog(e.getLocalizedMessage());
+			MainDesktop.consoleLog("Converted " +chart.name());
+		}
+		MainDesktop.consoleLog("QQ3 "+chart.name());
+		applyChartSetting(chart);
+
+	}
+
 	private void applyChartSetting(Charts chart) {
 		if (chart != null) {
 			if (chart.equals(Charts.Scatter_Plot_Chart) || chart.equals(Charts.Multivariate_Scatter_Plot_Chart)) {
 				fieldSetYAxis.hide();
 			} else {
 				fieldSetYAxis.show();
+			}
+			if (chart.equals(Charts.Bar_Chart)) {
+				// Show Y-Axis sort
+				yAxisSortComobBoxLabel.show();
+			} else {
+				// Hide Y-Axis sort
+				yAxisSortComobBoxLabel.hide();
 			}
 		}
 
@@ -812,13 +854,13 @@ public class ConfigPanel_1 implements INotify {
 	}
 
 	private void plot() {
-//		Element gwtviz_iframe = Document.get().getElementById("gwtviz_iframe");
-//		Element gwtviz_mount_chart_id = Document.get().getElementById("gwtviz_mount_chart_id");
-//
-//		MainDesktop.consoleLog("gwtviz_mount_chart_id.getOffsetHeight(): " + gwtviz_mount_chart_id.getOffsetHeight());
-//		if (gwtviz_iframe != null) {
-//			MainDesktop.consoleLog("gwtviz_iframe.getOffsetHeight(): " + gwtviz_iframe.getOffsetHeight());
-//		}
+		// Element gwtviz_iframe = Document.get().getElementById("gwtviz_iframe");
+		// Element gwtviz_mount_chart_id = Document.get().getElementById("gwtviz_mount_chart_id");
+		//
+		// MainDesktop.consoleLog("gwtviz_mount_chart_id.getOffsetHeight(): " + gwtviz_mount_chart_id.getOffsetHeight());
+		// if (gwtviz_iframe != null) {
+		// MainDesktop.consoleLog("gwtviz_iframe.getOffsetHeight(): " + gwtviz_iframe.getOffsetHeight());
+		// }
 
 		String possibleProblem = validateConfig();
 		if (possibleProblem != null) {

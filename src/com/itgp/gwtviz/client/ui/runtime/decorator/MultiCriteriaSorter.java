@@ -1,7 +1,7 @@
 /* 
  * The MIT License
  *
- * Copyright 2015 InsiTech LLC.   gwtviz@insitechinc.com
+ * Copyright 2015 InsiTech LLC.   gwtvis@insitechinc.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,7 @@ public class MultiCriteriaSorter extends Sorter{
     
     
     protected ArrayList<SorterCriterion> sortCriteriaList = new ArrayList<SorterCriterion>();
-
+    protected Sorter currentSorter = null; // the sorter that the compare is acting on at this very moment
     
     public static MultiCriteriaSorter create( ColumnSorter...  columnSorters){
         MultiCriteriaSorter instance = new MultiCriteriaSorter();
@@ -70,19 +70,30 @@ public class MultiCriteriaSorter extends Sorter{
     public int compare( int rowIndex1, int rowIndex2){
         for (SorterCriterion criterion: sortCriteriaList){
             
-            Sorter sorter = criterion.getSorter();
-            sorter.setFilterSet( this.getFilterSet()); // delayed assignment (this contains the model)
+            currentSorter = criterion.getSorter();
+            currentSorter.setFilterSet( this.getFilterSet()); // delayed assignment (this contains the model)
             
-            int comparison = sorter.compare(rowIndex1, rowIndex2);
+            int comparison = currentSorter.compare(rowIndex1, rowIndex2);
             if ( comparison != 0){
-                // stop at the first difference
-                if ( sorter.getSortDirection() == Sorter.DESCENDING){
-                    comparison =  0-comparison; // reverse
-                }
+//                // stop at the first difference
+//                if ( sorter.getSortDirection() == Sorter.DESCENDING){
+//                    comparison =  0-comparison; // reverse
+//                }
                 return comparison;
             }
             
         }
         return 0;
     }
+
+    @Override
+    public int getSortDirection(){
+        // if the current sorter exists use its sort direction, otherwise use the generic (Ascending by default)
+        return (currentSorter == null ? super.getSortDirection(): currentSorter.getSortDirection());
+    }
+    
+    
+    
+    
+    
 }

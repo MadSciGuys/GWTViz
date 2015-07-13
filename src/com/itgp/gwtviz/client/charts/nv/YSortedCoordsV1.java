@@ -1,7 +1,7 @@
 /* 
  * The MIT License
  *
- * Copyright 2015 InsiTech LLC.   gwtvis@insitechinc.com
+ * Copyright 2015 InsiTech LLC.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,43 +25,45 @@ package com.itgp.gwtviz.client.charts.nv;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-public class XYCoordsV1 extends JavaScriptObject {
+public class YSortedCoordsV1 extends JavaScriptObject {
 
-	protected XYCoordsV1() {
+	protected YSortedCoordsV1() {
 	}
 
-	public static final XYCoordsV1 create (double x, double y) {
-		XYCoordsV1 value =  create();
+	public static final YSortedCoordsV1 create (double x, double y, String label) {
+		YSortedCoordsV1 value =  create();
 		value.setX(x);
 		value.setY(y);
+                value.setLabel(label);
 		return value;
 	}
 	
-	public static final XYCoordsV1 create (String x, double y) {
-		XYCoordsV1 value =  create();
+	public static final YSortedCoordsV1 create (String x, double y, String label) {
+		YSortedCoordsV1 value =  create();
 		value.setX(x);
 		value.setY(y);
+                value.setLabel(label);
 		return value;
 	}
 	
 	
-    public static final XYCoordsV1 create (double x) {
-        XYCoordsV1 value =  create();
-        value.setX(x);
-        value.setNullY();
-        return value;
-    }
-    
-    public static final XYCoordsV1 create (String x) {
-        XYCoordsV1 value =  create();
-        value.setX(x);
-        value.setNullY();
-        return value;
-    }	
+//    public static final YSortedCoordsV1 create (double x) {
+//        YSortedCoordsV1 value =  create();
+//        value.setX(x);
+//        value.setNullY();
+//        return value;
+//    }
+//    
+//    public static final YSortedCoordsV1 create (String x) {
+//        YSortedCoordsV1 value =  create();
+//        value.setX(x);
+//        value.setNullY();
+//        return value;
+//    }	
 	
 	
 	
-	protected static native XYCoordsV1 create () /*-{
+	protected static native YSortedCoordsV1 create () /*-{
 	   return {};
 	}-*/;
 	
@@ -90,8 +92,19 @@ public class XYCoordsV1 extends JavaScriptObject {
 	}-*/;	
 	
 
-    public final native void setNullY() /*-{
-       this.y = null;
-    }-*/;
+        public final native void setNullY() /*-{
+           this.y = null;
+        }-*/;
+    
+    	
+	public final native String getLabel() /*-{
+	   return this.label;
+	}-*/;
+
+
+
+	public final native void setLabel(String value) /*-{
+	   this.label = value;
+	}-*/;
 	
 }

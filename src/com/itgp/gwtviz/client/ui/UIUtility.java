@@ -1,7 +1,7 @@
 /* 
  * The MIT License
  *
- * Copyright 2015 InsiTech LLC.   gwtviz@insitechinc.com
+ * Copyright 2015 InsiTech LLC.   gwtvis@insitechinc.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,9 +23,11 @@
  */
 package com.itgp.gwtviz.client.ui;
 
+import com.itgp.gwtviz.shared.gconfig.GraphConfigUtility.YAxisSort;
 import com.itgp.gwtviz.shared.model.*;
 import com.sencha.gxt.widget.core.client.container.Container;
 import com.sencha.gxt.widget.core.client.form.SimpleComboBox;
+
 import java.util.*;
 
 public class UIUtility {
@@ -50,12 +52,21 @@ public class UIUtility {
 		}
 	}
 
+	public static ArrayList<String> getSortChoices() {
+		ArrayList<String> list = new ArrayList<String>();
+		list.add(YAxisSort.NoSort.name());
+		list.add(YAxisSort.Ascending.name());
+		list.add(YAxisSort.Descending.name());
+		return list;
+	}
+	
+	
 	public static ArrayList<ChartDesc> getChartsList() {
 		ArrayList<ChartDesc> list = new ArrayList<ChartDesc>();
 		list.add(convertChartEnum(Charts.Bar_Chart));
 		list.add(convertChartEnum(Charts.Pie_Chart));
-		list.add(convertChartEnum(Charts.Bar_Chart_With_Stacked_Columns));
-		list.add(convertChartEnum(Charts.Bar_Chart_With_Grouped_Columns));
+		//list.add(convertChartEnum(Charts.Bar_Chart_With_Stacked_Columns));
+		//list.add(convertChartEnum(Charts.Bar_Chart_With_Grouped_Columns));
 		list.add(convertChartEnum(Charts.Line_Chart));
 		list.add(convertChartEnum(Charts.Scatter_Plot_Chart));
 		list.add(convertChartEnum(Charts.Multivariate_Scatter_Plot_Chart));

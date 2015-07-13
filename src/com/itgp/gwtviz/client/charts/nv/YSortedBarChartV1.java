@@ -1,7 +1,7 @@
 /* 
  * The MIT License
  *
- * Copyright 2015 InsiTech LLC.   gwtvis@insitechinc.com
+ * Copyright 2015 InsiTech LLC.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,30 +23,50 @@
  */
 package com.itgp.gwtviz.client.charts.nv;
 
-public class BarChartV1 extends AbstractChartXYV1 {
+import com.google.gwt.core.client.JsArray;
 
-    protected BarChartV1() {}
+public class YSortedBarChartV1 extends AbstractChartXYV1 {
 
-    public static final native BarChartV1 create()    /*-{
+    protected YSortedBarChartV1() {}
+
+    public static final native YSortedBarChartV1 create()   /*-{
                return {
-                       chartType : $wnd.ITGP_CHART_TYPE_BAR,
+                       chartType : $wnd.ITGP_CHART_TYPE_YSORTED_BAR,
                        reduceXTicks : true,
                        rotateLabels : 0,
                        showControls: true,
                        groupSpacing: 0.1,
-                       stacked: false
-               }; //  ITGP_CHART_TYPE_BAR is defined in itgp.js as a constant
+                       stacked: false,
+                       showControls: false
+               }; //  ITGP_CHART_TYPE_YSORTED_BAR is defined in itgp.js as a constant
        }-*/
     ;
 
-    public final native boolean getStacked()    /*-{
-          return this.stacked;
+    
+    
+    public final YSortedSeriesV1 createAndAddYSortedSeries(String key) {
+        YSortedSeriesV1 val = YSortedSeriesV1.create(key);
+        addYSortedSeries(val);
+
+        return val;
+
+    }
+
+    public final void addYSortedSeries(YSortedSeriesV1 value) {
+        if (value == null) {
+            return;
+        }
+
+        JsArray<YSortedSeriesV1> series = getYSortedsSeries();
+
+        series.set(series.length(), value);
+    }
+    
+        public final native JsArray<YSortedSeriesV1> getYSortedsSeries()    /*-{
+               if ( this.xySeries == null){
+                       this.xySeries = [];
+               }
+          return this.xySeries;
        }-*/
     ;
-
-    public final native void setStacked(boolean value)    /*-{
-          this.stacked = value;
-       }-*/
-    ;
-
 }

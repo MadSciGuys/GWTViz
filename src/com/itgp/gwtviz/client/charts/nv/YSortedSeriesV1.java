@@ -1,7 +1,7 @@
 /* 
  * The MIT License
  *
- * Copyright 2015 InsiTech LLC.   gwtvis@insitechinc.com
+ * Copyright 2015 InsiTech LLC.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,23 +25,23 @@ package com.itgp.gwtviz.client.charts.nv;
 
 import com.google.gwt.core.client.*;
 
-public class XYSeriesV1 extends JavaScriptObject {
+public class YSortedSeriesV1 extends JavaScriptObject {
 
-	protected XYSeriesV1() {
+	protected YSortedSeriesV1() {
 	}
 
-	public final static native XYSeriesV1 create() /*-{
+	public final static native YSortedSeriesV1 create() /*-{
 		return {}; // same as new Object()
 	}-*/;
 
-	public final static XYSeriesV1 create(String key) {
-		XYSeriesV1 value = XYSeriesV1.create();
+	public final static YSortedSeriesV1 create(String key) {
+		YSortedSeriesV1 value = YSortedSeriesV1.create();
 		value.setKey(key);
 		return value;
 	}
 
-	public final static XYSeriesV1 create(String key, String color) {
-		XYSeriesV1 value = XYSeriesV1.create(key);
+	public final static YSortedSeriesV1 create(String key, String color) {
+		YSortedSeriesV1 value = YSortedSeriesV1.create(key);
 		value.setColor(color);
 		return value;
 	}
@@ -56,58 +56,39 @@ public class XYSeriesV1 extends JavaScriptObject {
 		this.key = value;
 	}-*/;
 
-	public final native JsArray<XYCoordsV1> getValues() /*-{
+	public final native JsArray<YSortedCoordsV1> getValues() /*-{
 		if (this.values == null) {
 			this.values = [];
 		}
 		return this.values;
 	}-*/;
 
-	public final native void setValues(JsArray<XYCoordsV1> value) /*-{
+	public final native void setValues(JsArray<YSortedCoordsV1> value) /*-{
 		this.values = value;
 	}-*/;
 
-  	public final void addXY(Object x, double y) {
+  	public final void addCoords(Object x, double y, String label) {
             if ( x instanceof Double){
-            	addXYDoubleX((Double) x, y);
+            	addCoordsDoubleX((Double) x, y,label);
             } else {
-            	addXYStringX((String) x, y);
+            	addCoordsStringX((String) x, y, label);
             }
 	};  
         
-	protected final void addXYDoubleX(double x, double y) {
-		JsArray<XYCoordsV1> value = getValues();
-		value.set(value.length(), XYCoordsV1.create(x, y));
+	protected final void addCoordsDoubleX(double x, double y, String label) {
+		JsArray<YSortedCoordsV1> value = getValues();
+		value.set(value.length(), YSortedCoordsV1.create(x, y, label));
 
 	};
 
 
-	protected final void addXYStringX(String x, double y) {
-		JsArray<XYCoordsV1> value = getValues();
-		value.set(value.length(), XYCoordsV1.create(x, y));
+	protected final void addCoordsStringX(String x, double y, String label) {
+		JsArray<YSortedCoordsV1> value = getValues();
+		value.set(value.length(), YSortedCoordsV1.create(x, y, label));
 
 	};
     
-    public final void addNull(Object x){
-        if ( x instanceof Double){
-            addNullDoubleX((Double) x);
-        } else {
-            addNullStringX((String) x);
-        }
-        
-    }
-	
-    protected final void addNullDoubleX(double x) {
-        JsArray<XYCoordsV1> value = getValues();
-        value.set(value.length(), XYCoordsV1.create(x));
 
-    };	
-	
-    protected final void addNullStringX(String x) {
-        JsArray<XYCoordsV1> value = getValues();
-        value.set(value.length(), XYCoordsV1.create(x));
-
-    };
 	
 	public final native String getColor() /*-{
 		return this.color;
