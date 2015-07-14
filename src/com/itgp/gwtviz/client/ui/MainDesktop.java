@@ -38,7 +38,7 @@ import java.util.*;
 
 public class MainDesktop implements EntryPoint {
 
-	public final static String version = "Visualization Module v0.60";
+	public final static String version = "Visualization Module v0.62";
 
 	public static boolean IN_DEBUG_MODE = true;
 
