@@ -23,7 +23,7 @@
  */
 
 // ----- Library version ---------
-var ITGP_JS_VAR=0.63;
+var ITGP_JS_VAR=0.64;
 // ----- Graph div ID ----
 var ITGP_SVG_ID = 'chart';
 // ------ Graph Types -----
@@ -279,7 +279,10 @@ var itgp = new function() {
 //			
 //		}
 		
-		var parentDocument = window.top.document;
+		var parentDocument = window.document;
+		if(parentDocument==null){
+			parentDocument = window.top.document;
+		}
 		svgElem = parentDocument.getElementById(svgID);
 		svgParent = d3.select(svgElem);
 		return svgParent;

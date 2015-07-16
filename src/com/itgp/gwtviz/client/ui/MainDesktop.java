@@ -38,7 +38,7 @@ import java.util.*;
 
 public class MainDesktop implements EntryPoint {
 
-	public final static String version_num = "0.63";
+	public final static String version_num = "0.64";
 
 	public final static String version = "Visualization Module v" + version_num;
 

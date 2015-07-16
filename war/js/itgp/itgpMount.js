@@ -23,7 +23,7 @@
  */
 
 // ----- Library version ---------
-var ITGPMOUNT_JS_VAR=0.63;
+var ITGPMOUNT_JS_VAR=0.64;
 
 var _GWTVIZ_DIV_IFRAME = 'gwtviz_div_iframe';
 var _GWTVIZ_IFRAME = 'gwtviz_iframe';
