@@ -1,15 +1,43 @@
-const _GWTVIZ_DIV_IFRAME = 'gwtviz_div_iframe';
-const _GWTVIZ_IFRAME = 'gwtviz_iframe';
-const _GWTVIZ_MOUNT_POINT_DEV = 'gwtviz-mount-point-dev';
-const _GWTVIZ_MAIN_PANEL_EDIT = "gwtviz-main-panel-edit";
-const _DRUPAL_DEV__EDIT_FIELD_VISUAL_SPACE = 'edit-field-visual-space';
-const _DRUPAL_EDIT__CONTENT_CLEARFIX = 'content clearfix'; // This class should be
+/* 
+ * The MIT License
+ *
+ * Copyright 2015 InsiTech LLC.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+// ----- Library version ---------
+var ITGPMOUNT_JS_VAR=0.63;
+
+var _GWTVIZ_DIV_IFRAME = 'gwtviz_div_iframe';
+var _GWTVIZ_IFRAME = 'gwtviz_iframe';
+var _GWTVIZ_MOUNT_POINT_DEV = 'gwtviz-mount-point-dev';
+var _GWTVIZ_MAIN_PANEL_EDIT = "gwtviz-main-panel-edit";
+var _DRUPAL_DEV__EDIT_FIELD_VISUAL_SPACE = 'edit-field-visual-space';
+var _DRUPAL_EDIT__CONTENT_CLEARFIX = 'content clearfix'; // This class should be
 														// hidden
-const _DRUPAL_EDIT_BLOCK_SYSTEM_MAIN = 'block-system-main';
-const _DRUPAL_EDIT_FIELD_NAME_FIELD_VISUAL_SPACE = "field field-name-field-visual-space field-type-text-long field-label-above";
+var _DRUPAL_EDIT_BLOCK_SYSTEM_MAIN = 'block-system-main';
+var _DRUPAL_EDIT_FIELD_NAME_FIELD_VISUAL_SPACE = "field field-name-field-visual-space field-type-text-long field-label-above";
 
 window.onload = function gwtvizMount() {
 
+	console.log("gwtviz: itgpMount.js  version: " + ITGPMOUNT_JS_VAR);
 	mount();
 	function mount() {
 		findRelativePath();
@@ -75,7 +103,7 @@ window.onload = function gwtvizMount() {
 	function makeDevTimeIFrame(type) {
 
 		var urlPath = findRelativePath();
-		console.log('Current Location->' + urlPath);
+		//console.log('Current Location->' + urlPath);
 
 		
 		var divIFrame = document.createElement("div");
@@ -88,14 +116,14 @@ window.onload = function gwtvizMount() {
 		divIFrame.style.visibility = 'visible';
 
 		var _navBar = document.getElementsByClassName('navbar-lining clearfix');
-		console.log('found navbar-lining clearfix '+_navBar);
+		//console.log('found navbar-lining clearfix '+_navBar);
 		var _navBarHorizontal = document.getElementsByClassName('navbar-tray overlay-displace-top active navbar-tray-horizontal');
 		if(_navBarHorizontal.length>0){
 			var _width = (window.innerWidth - (window.innerWidth - window.document.documentElement.getElementsByTagName('body')[0].clientWidth))-(window.innerWidth *0.20);
-			console.log('found top navbar-lining clearfix '+_width);
+			//console.log('found top navbar-lining clearfix '+_width);
 			divIFrame.style.width = _width+'px';
 		}else{
-			console.log('found left navbar-lining clearfix '+window.innerWidth);
+			//console.log('found left navbar-lining clearfix '+window.innerWidth);
 			var _width =  (window.innerWidth - (window.innerWidth - window.document.documentElement.getElementsByTagName('body')[0].clientWidth))-(window.innerWidth *0.15);
 			divIFrame.style.width = _width+'px';
 		}
@@ -111,8 +139,12 @@ window.onload = function gwtvizMount() {
 		iframe.style.visibility = 'hidden';
 		iframe.style.visibility = 'visible';
 		
+		//var div_gwtviz_chart_id = document.createElement("div");
+		//div_gwtviz_chart_id.setAttribute('id', 'chart');
+		
 		
 		divIFrame.appendChild(iframe);
+		//divIFrame.appendChild(div_gwtviz_chart_id);
 		// iframe.setAttribute('onload' ,setIframeHeight(iframe.id));
 		return divIFrame;
 
@@ -217,7 +249,7 @@ window.onload = function gwtvizMount() {
 				.getElementsByTagName('body')[0], x = w.innerWidth
 				|| e.clientWidth || g.clientWidth, y = w.innerHeight
 				|| e.clientHeight || g.clientHeight;
-		console.log("X:" + x + "  Y:" + y);
+		//console.log("X:" + x + "  Y:" + y);
 
 	}
 

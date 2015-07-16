@@ -1,18 +1,41 @@
-/* 11global d3 */
-
-/**
- * 
+/* 
+ * The MIT License
+ *
+ * Copyright 2015 InsiTech LLC.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
+
+// ----- Library version ---------
+var ITGP_JS_VAR=0.63;
 // ----- Graph div ID ----
 var ITGP_SVG_ID = 'chart';
 // ------ Graph Types -----
 var ITGP_CHART_TYPE_BAR = 'bar';
 var ITGP_CHART_TYPE_DISCRETE_BAR = 'discreteBar';
+var ITGP_CHART_TYPE_YSORTED_BAR = 'ySortedBar';
 var ITGP_CHART_TYPE_LINE = 'line';
 var ITGP_CHART_TYPE_PIE = 'pie';
 var ITGP_CHART_TYPE_DONUT = 'donut';
 var ITGP_CHART_TYPE_SCATTER = 'scatter';
 var ITGP_CHART_TYPE_MATRIXSCATTER = 'matrixScatter';
+
 
 // -------------------------
 
@@ -78,7 +101,28 @@ var itgp = new function() {
 		setupXYAxis(chart, jParam); // private function call inside this domain
 		return chart;
 	}
+        
+  	this.getYSortedBarChart = function getYSortedBarChart(jParam) {
 
+		var chart = nv.models.multiBarChart();
+
+		chart.reduceXTicks(true) // If 'false', every single x-axis tick
+		// label will be rendered.
+		// chart.rotateLabels(90) // Angle to rotate x-axis labels.
+		chart.showControls(false) // Allow user to switch between
+		// 'Grouped' and 'Stacked' mode.
+		chart.groupSpacing(0.1); // Distance between each group of bars.
+
+		setupXYAxis(chart, jParam); // private function call inside this domain
+                
+                chart.tooltipContent(function(key, x, y, e, graph) {
+                    return '<h3>' + key + '</h3>' +
+                    '<p>Bar# ' + x + ': y='+  y + ' at x=' + e.point.label + ' </p>';
+                });
+                
+		return chart;
+	}      
+        
 	this.getDiscreteBarChart = function getDiscreteBarChart(jParam) {
 
 		var chart = nv.models.discreteBarChart();
@@ -220,6 +264,27 @@ var itgp = new function() {
 	}
 
 	/**
+	 * Find the <div id="chart"> element either inside the local iFrame or outside it in the main page
+	 */
+	this.findChartElement=function(svgID){
+		if (svgID == null) {
+			svgID = ITGP_SVG_ID;
+		}
+
+//		var svgParent = d3.select("#" + svgID);
+//		if ( svgParent == null){
+//			// look outside the local iFrame
+//			var parentDocument = window.top.document;
+//			svgParent = parentDocument.getElementById(svgID);
+//			
+//		}
+		
+		var parentDocument = window.top.document;
+		svgElem = parentDocument.getElementById(svgID);
+		svgParent = d3.select(svgElem);
+		return svgParent;
+	}
+	/**
 	 * Do not call directly - Call chart()
 	 * 
 	 * @param jParam
@@ -232,7 +297,7 @@ var itgp = new function() {
 			svgID = ITGP_SVG_ID;
 		}
 
-		var svgParent = d3.select("#" + svgID);
+		var svgParent = itgp.findChartElement();
 		svgParent.selectAll("*").remove();
 		var svg = svgParent.append('svg');
 
@@ -258,7 +323,9 @@ var itgp = new function() {
 			if (chartType == ITGP_CHART_TYPE_BAR) {
 				graph = itgp.getMultiBarChart(jParam);
 				svg.datum(jParam.xySeries)
-
+                        } else if ( chartType == ITGP_CHART_TYPE_YSORTED_BAR){
+                            graph = itgp.getYSortedBarChart(jParam);
+                            svg.datum(jParam.xySeries);
 			} else if (chartType == ITGP_CHART_TYPE_LINE) {
 				graph = itgp.getLineChart(jParam);
 				svg.datum(jParam.xySeries)
@@ -1477,7 +1544,7 @@ var itgp = new function() {
 	this.ScatterMatrix.prototype.render = function(svgID) {
 		var self = this;
 
-		var outerContainer = d3.select("#" + svgID);
+		var outerContainer = itgp.findChartElement();
 		outerContainer.selectAll("*").remove();
 		outerContainer.append('div').attr("id", "matrixChartContainer");
 

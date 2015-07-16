@@ -38,7 +38,9 @@ import java.util.*;
 
 public class MainDesktop implements EntryPoint {
 
-	public final static String version = "Visualization Module v0.62";
+	public final static String version_num = "0.63";
+
+	public final static String version = "Visualization Module v" + version_num;
 
 	public static boolean IN_DEBUG_MODE = true;
 
@@ -109,8 +111,6 @@ public class MainDesktop implements EntryPoint {
 		configPanel_1.readCurrentStateFromConfig();
 		configPanel_1.applyChartSetting();
 		MainDesktop.consoleLog("initDevPlugin " + 5);
-		
-		
 
 		return cp;
 	}
@@ -206,8 +206,18 @@ public class MainDesktop implements EntryPoint {
 		// First sets the MRoute Server access
 		// Then the callback calls detectModeAndMount()
 		// ***************************************
+		printVersions(version_num);
 		ServerComm.getMRouteAddress();
 	}
+
+	public static final native void printVersions(String gwtVersion)/*-{
+		console.log("gwtviz: itgp.js       version: " + $wnd.ITGP_JS_VAR);
+		console.log("gwtviz: gwtViz Module version: " + gwtVersion);
+	}-*/;
+
+	public static final void printGWTVersion() {
+
+	};
 
 	public static void detectModeAndMount() {
 
@@ -317,44 +327,44 @@ public class MainDesktop implements EntryPoint {
 		RunMode currentRunMode = RunMode.Design;
 
 		String url = Window.Location.getHref();
-		consoleLog("RunMode Set: "+url);
+		consoleLog("RunMode Set: " + url);
 		if (url.endsWith(RunMode.Design.name())) {
-			currentRunMode = RunMode.Design;		
+			currentRunMode = RunMode.Design;
 			CurrentMode = Drupal.Mode.Drupal_Edit_Existing;
 		} else if (url.endsWith(RunMode.Runtime.name())) {
 			currentRunMode = RunMode.Runtime;
 			CurrentMode = Drupal.Mode.Drupal_Read;
 		}
-		consoleLog("RunMode: "+currentRunMode.name());
+		consoleLog("RunMode: " + currentRunMode.name());
 
 		if (currentRunMode.equals(RunMode.Design)) {
-			consoleLog("Trying to find:  "+Drupal._GWTVIZ_MOUNT_CONFIG_ID);
-			//RootPanel rootPanel = RootPanel.get();
+			consoleLog("Trying to find:  " + Drupal._GWTVIZ_MOUNT_CONFIG_ID);
+			// RootPanel rootPanel = RootPanel.get();
 			RootPanel panelConfig = RootPanel.get(Drupal._GWTVIZ_MOUNT_CONFIG_ID);
 			if (panelConfig != null) {
-				consoleLog("Found:  "+Drupal._GWTVIZ_MOUNT_CONFIG_ID);
+				consoleLog("Found:  " + Drupal._GWTVIZ_MOUNT_CONFIG_ID);
 				panelConfig.add(makeDesignConfigurator());
 				consoleLog("Added  DesignConfigurator()");
-			} 
+			}
 		}
 
-		if (currentRunMode.equals(RunMode.Design) ||currentRunMode.equals(RunMode.Runtime)) {
-			consoleLog("Trying to find:  "+Drupal._GWTVIZ_MOUNT_PROCESS_ID);
+		if (currentRunMode.equals(RunMode.Design) || currentRunMode.equals(RunMode.Runtime)) {
+			consoleLog("Trying to find:  " + Drupal._GWTVIZ_MOUNT_PROCESS_ID);
 			RootPanel panelProcessInfo = RootPanel.get(Drupal._GWTVIZ_MOUNT_PROCESS_ID);
 			if (panelProcessInfo != null) {
-				consoleLog("Found:  "+Drupal._GWTVIZ_MOUNT_PROCESS_ID);
+				consoleLog("Found:  " + Drupal._GWTVIZ_MOUNT_PROCESS_ID);
 				panelProcessInfo.add(Drupal.makeProcessInfoDiv());
 				consoleLog("Added  ProcessInfoDiv()");
-			} 
+			}
 
-			consoleLog("Trying to find:  "+Drupal._GWTVIZ_MOUNT_CHART_ID);
+			consoleLog("Trying to find:  " + Drupal._GWTVIZ_MOUNT_CHART_ID);
 			RootPanel panelChart = RootPanel.get(Drupal._GWTVIZ_MOUNT_CHART_ID);
 			if (panelProcessInfo != null) {
-				consoleLog("Found:  "+Drupal._GWTVIZ_MOUNT_CHART_ID);
+				consoleLog("Found:  " + Drupal._GWTVIZ_MOUNT_CHART_ID);
 				panelChart.add(Drupal.makeChartDiv());
 				consoleLog("Added  ChartDiv()");
 				addRuntimeGraph();
-			} 
+			}
 		}
 	}
 
